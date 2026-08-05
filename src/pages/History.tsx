@@ -39,8 +39,6 @@ export function History() {
         Cada passinho conta. Acompanhe a jornada.
       </p>
 
-      {loading && <p className="mt-4 text-body-md text-on-surface-variant">Carregando…</p>}
-
       {!loading && events.length === 0 && (
         <p className="mt-4 text-body-md text-on-surface-variant">
           Nenhuma atividade registrada ainda.
@@ -77,7 +75,7 @@ export function History() {
                       </span>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-body-md text-on-surface">
+                      <p className="text-body-md text-on-surface">
                         {event.type === 'deposit' ? (
                           <>
                             <span className="font-semibold">{event.actorName}</span> depositou{' '}

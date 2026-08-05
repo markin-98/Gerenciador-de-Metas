@@ -44,7 +44,7 @@ export function Dashboard() {
   return (
     <AppShell>
       <header className="flex items-center justify-between gap-4">
-        <Logo variant="full" size="lg" />
+        <Logo variant="full" size="lg" withBackground />
         <Link
           to="/profile"
           aria-label="Meu perfil"
@@ -84,8 +84,6 @@ export function Dashboard() {
 
       <section className="mt-8">
         <h2 className="text-body-lg font-semibold text-on-surface">Metas em Andamento</h2>
-
-        {loading && <p className="mt-4 text-body-md text-on-surface-variant">Carregando…</p>}
 
         {!loading && activeGoals.length === 0 && (
           <p className="mt-4 text-body-md text-on-surface-variant">

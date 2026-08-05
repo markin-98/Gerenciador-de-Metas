@@ -148,7 +148,7 @@ export function Profile() {
               onClick={startEditingName}
               className="group flex items-center gap-1.5 text-left"
             >
-              <p className="truncate text-body-lg font-semibold text-on-primary">
+              <p className="text-body-lg font-semibold text-on-primary">
                 {profile?.name}
               </p>
               <PencilSimple
@@ -157,7 +157,7 @@ export function Profile() {
               />
             </button>
           )}
-          <p className="truncate text-label-md text-primary-fixed">{user?.email}</p>
+          <p className="break-all text-label-md text-primary-fixed">{user?.email}</p>
           {memberSince && (
             <p className="mt-1 flex items-center gap-1 text-label-sm text-primary-fixed">
               <CalendarBlank size={13} />
@@ -178,7 +178,7 @@ export function Profile() {
               <stat.icon size={20} weight="fill" />
             </span>
             <div className="min-w-0">
-              <p className="truncate text-body-md font-semibold text-on-surface">{stat.value}</p>
+              <p className="text-body-md font-semibold text-on-surface">{stat.value}</p>
               <p className="text-label-sm text-on-surface-variant">{stat.label}</p>
             </div>
           </div>
@@ -201,7 +201,6 @@ export function Profile() {
 
       <section className="mt-8">
         <h2 className="text-body-lg font-semibold text-on-surface">Metas que você compartilhou</h2>
-        {loading && <p className="mt-3 text-body-md text-on-surface-variant">Carregando…</p>}
         {!loading && sharedByMe.length === 0 && (
           <p className="mt-3 text-body-md text-on-surface-variant">
             Você ainda não compartilhou nenhuma meta.
@@ -227,7 +226,6 @@ export function Profile() {
         <h2 className="text-body-lg font-semibold text-on-surface">
           Metas compartilhadas com você
         </h2>
-        {loading && <p className="mt-3 text-body-md text-on-surface-variant">Carregando…</p>}
         {!loading && sharedWithMe.length === 0 && (
           <p className="mt-3 text-body-md text-on-surface-variant">
             Ninguém compartilhou uma meta com você ainda.

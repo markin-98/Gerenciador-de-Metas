@@ -54,11 +54,7 @@ export function GoalDetail() {
   }, [goal?.status, goal?.name, showToast])
 
   if (!goal) {
-    return (
-      <AppShell>
-        <p className="text-body-md text-on-surface-variant">Carregando…</p>
-      </AppShell>
-    )
+    return <AppShell><div /></AppShell>
   }
 
   const { savedCents, remainingCents, percent } = calculateProgress(
@@ -152,7 +148,7 @@ export function GoalDetail() {
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2.5">
             <TypeIcon size={26} weight="duotone" className="shrink-0 text-primary" />
-            <h1 className="truncate text-headline-sm-mobile text-on-surface">{goal.name}</h1>
+            <h1 className="text-headline-sm-mobile text-on-surface">{goal.name}</h1>
           </div>
           <span
             className={`flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-label-sm ${
@@ -230,7 +226,7 @@ export function GoalDetail() {
                   avatarUrl={request.profile?.avatar_url}
                   size="sm"
                 />
-                <p className="min-w-0 flex-1 truncate text-body-md text-on-surface">
+                <p className="min-w-0 flex-1 text-body-md text-on-surface">
                   {request.profile?.name ?? 'Alguém'}
                 </p>
                 <button

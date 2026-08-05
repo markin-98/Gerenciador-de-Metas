@@ -7,11 +7,7 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
   const location = useLocation()
 
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center text-on-surface-variant">
-        Carregando…
-      </div>
-    )
+    return <div className="h-screen bg-surface" />
   }
 
   if (!session) {

@@ -66,8 +66,6 @@ export function Achievements() {
         )}
       </div>
 
-      {loading && <p className="mt-6 text-body-md text-on-surface-variant">Carregando…</p>}
-
       {!loading && galleryItems.length === 0 && (
         <p className="mt-6 text-body-md text-on-surface-variant">Ainda não há metas criadas.</p>
       )}

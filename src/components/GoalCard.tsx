@@ -26,7 +26,7 @@ export function GoalCard({ goal, savedCents, percent, style }: GoalCardProps) {
       <div className="flex items-start justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2.5">
           <TypeIcon size={22} weight="duotone" className="shrink-0 text-primary" />
-          <h3 className="truncate text-body-lg font-semibold text-on-surface">{goal.name}</h3>
+          <h3 className="text-body-lg font-semibold text-on-surface">{goal.name}</h3>
         </div>
         <span
           className={`flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-label-sm ${
