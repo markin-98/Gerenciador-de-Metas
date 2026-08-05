@@ -9,44 +9,39 @@ interface LogoProps {
 
 const iconSizeClasses: Record<NonNullable<LogoProps['size']>, string> = {
   md: 'h-9 w-9',
-  lg: 'h-12 w-12',
+  lg: 'h-11 w-11',
 }
 
 const bgSizeClasses: Record<NonNullable<LogoProps['size']>, string> = {
   md: 'h-11 w-11',
-  lg: 'h-14 w-14',
-}
-
-const wordmarkSizeClasses: Record<NonNullable<LogoProps['size']>, string> = {
-  md: 'text-headline-sm-mobile',
-  lg: 'text-headline-sm',
+  lg: 'h-13 w-13',
 }
 
 export function Logo({ variant = 'full', size = 'md', withBackground = false, className = '' }: LogoProps) {
-  const iconImg = (
+  const icon = (
     <img
       src={logoIcon}
       alt={variant === 'icon' ? 'Gerenciador de Metas' : ''}
-      className={`${iconSizeClasses[size]} ${withBackground ? '' : className}`}
+      className={iconSizeClasses[size]}
     />
   )
 
   const wrappedIcon = withBackground ? (
-    <span className={`flex shrink-0 items-center justify-center rounded-full bg-white shadow-sm ${bgSizeClasses[size]} ${variant === 'icon' ? className : ''}`}>
-      {iconImg}
+    <span className={`flex shrink-0 items-center justify-center rounded-full bg-white shadow-sm ${bgSizeClasses[size]}`}>
+      {icon}
     </span>
   ) : (
-    iconImg
+    <span className="shrink-0">{icon}</span>
   )
 
   if (variant === 'icon') {
-    return wrappedIcon
+    return <span className={className}>{wrappedIcon}</span>
   }
 
   return (
-    <div className={`flex min-w-0 items-center gap-3 ${className}`}>
-      <span className="shrink-0">{wrappedIcon}</span>
-      <span className={`${wordmarkSizeClasses[size]} leading-tight text-on-surface`}>
+    <div className={`flex items-center gap-2 ${className}`}>
+      {wrappedIcon}
+      <span className="whitespace-nowrap text-[15px] font-semibold leading-tight text-on-surface sm:text-[17px]" style={{ fontFamily: 'var(--font-display)' }}>
         Gerenciador de Metas
       </span>
     </div>

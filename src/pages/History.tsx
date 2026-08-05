@@ -1,6 +1,7 @@
 import { ArrowUp, Flag } from '@phosphor-icons/react'
 import { AppShell } from '../components/AppShell'
 import { Avatar } from '../components/Avatar'
+import { HistorySkeleton } from '../components/Skeleton'
 import { useMySpace } from '../hooks/useMySpace'
 import { useHistory } from '../hooks/useHistory'
 import { formatCentsToBRL } from '../lib/deposits'
@@ -34,13 +35,15 @@ export function History() {
 
   return (
     <AppShell>
-      <h1 className="text-headline-sm-mobile text-on-surface">Histórico</h1>
-      <p className="mt-1 text-body-md text-on-surface-variant">
+      <h1 className="animate-fade-in-up text-headline-sm-mobile text-on-surface">Histórico</h1>
+      <p className="animate-fade-in-up mt-1 text-body-md text-on-surface-variant" style={{ animationDelay: '40ms' }}>
         Cada passinho conta. Acompanhe a jornada.
       </p>
 
+      {loading && <HistorySkeleton />}
+
       {!loading && events.length === 0 && (
-        <p className="mt-4 text-body-md text-on-surface-variant">
+        <p className="animate-fade-in-up mt-6 text-body-md text-on-surface-variant">
           Nenhuma atividade registrada ainda.
         </p>
       )}
@@ -48,10 +51,10 @@ export function History() {
       <div className="mt-6 flex flex-col gap-6">
         {Array.from(groups.entries()).map(([label, groupEvents]) => (
           <div key={label}>
-            <h3 className="text-label-sm uppercase text-primary">{label}</h3>
+            <h3 className="animate-fade-in-up text-label-sm uppercase text-primary">{label}</h3>
             <div className="mt-2 flex flex-col gap-3">
               {groupEvents.map((event) => {
-                const delay = rowIndex++ * 50
+                const delay = rowIndex++ * 60
                 return (
                   <div
                     key={event.id}
