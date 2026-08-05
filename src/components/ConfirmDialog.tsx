@@ -29,7 +29,7 @@ export function ConfirmDialog({
         aria-modal="true"
         aria-labelledby="confirm-dialog-title"
         tabIndex={-1}
-        className="animate-modal-in card-elevated w-full max-w-sm p-6 focus:outline-none"
+        className="animate-modal-in card-elevated w-full max-w-sm rounded-2xl p-6 focus:outline-none"
       >
         <h3 id="confirm-dialog-title" className="text-headline-sm-mobile text-on-surface">
           {title}
@@ -39,14 +39,14 @@ export function ConfirmDialog({
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-full px-4 py-2 text-label-md text-on-surface-variant transition-transform hover:bg-surface-container active:scale-95"
+            className="rounded-full px-4 py-2.5 text-label-md font-medium text-on-surface-variant transition-all hover:bg-surface-container active:scale-95"
           >
             Cancelar
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="rounded-full bg-error px-4 py-2 text-label-md text-on-error transition-transform hover:opacity-90 active:scale-95"
+            className="rounded-full bg-error px-4 py-2.5 text-label-md font-medium text-on-error shadow-md shadow-error/20 transition-all hover:shadow-lg hover:shadow-error/30 active:scale-95"
           >
             {confirmLabel}
           </button>

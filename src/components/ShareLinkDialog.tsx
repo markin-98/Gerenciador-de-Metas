@@ -43,14 +43,14 @@ export function ShareLinkDialog({ open, title, description, link, onClose }: Sha
         aria-modal="true"
         aria-labelledby="share-dialog-title"
         tabIndex={-1}
-        className="animate-modal-in card-elevated w-full max-w-sm p-6 focus:outline-none"
+        className="animate-modal-in card-elevated w-full max-w-sm rounded-2xl p-6 focus:outline-none"
       >
         <h3 id="share-dialog-title" className="text-headline-sm-mobile text-on-surface">
           {title}
         </h3>
         <p className="mt-2 text-body-md text-on-surface-variant">{description}</p>
 
-        <div className="mt-4 flex items-center gap-2 rounded-md border border-outline-variant bg-surface-container-low px-3 py-2">
+        <div className="mt-4 flex items-center gap-2 rounded-xl border border-outline-variant/50 bg-surface-container-low px-4 py-3">
           <input
             readOnly
             value={link}
@@ -63,7 +63,7 @@ export function ShareLinkDialog({ open, title, description, link, onClose }: Sha
           <button
             type="button"
             onClick={handleCopy}
-            className="rounded-full bg-primary px-4 py-2.5 text-label-md text-on-primary transition-transform active:scale-95"
+            className="rounded-full bg-primary px-4 py-2.5 text-label-md font-medium text-on-primary shadow-md shadow-primary/20 transition-all hover:shadow-lg hover:shadow-primary/30 active:scale-95"
           >
             {copied ? 'Link copiado!' : 'Copiar link'}
           </button>
@@ -71,7 +71,7 @@ export function ShareLinkDialog({ open, title, description, link, onClose }: Sha
             <button
               type="button"
               onClick={handleShare}
-              className="rounded-full border border-primary px-4 py-2.5 text-label-md text-primary transition-transform active:scale-95"
+              className="rounded-full border border-primary/50 px-4 py-2.5 text-label-md font-medium text-primary transition-all hover:bg-primary/5 active:scale-95"
             >
               Compartilhar
             </button>
