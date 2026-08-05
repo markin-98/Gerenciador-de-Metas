@@ -10,9 +10,11 @@ import {
   Wallet,
   CalendarBlank,
   SignOut,
+  Sparkle,
 } from '@phosphor-icons/react'
 import { AppShell } from '../components/AppShell'
 import { EditableAvatar } from '../components/EditableAvatar'
+import { Skeleton } from '../components/Skeleton'
 import { useAuth } from '../contexts/AuthContext'
 import { useMySpace } from '../hooks/useMySpace'
 import { useGoals } from '../hooks/useGoals'
@@ -89,29 +91,35 @@ export function Profile() {
   }
 
   const stats = [
-    { icon: Target, label: 'Metas ativas', value: String(activeGoals.length) },
-    { icon: Trophy, label: 'Concluídas', value: String(completedGoals.length) },
-    { icon: Wallet, label: 'Total guardado', value: formatCentsToBRL(totalSavedCents) },
+    { icon: Target, label: 'Metas ativas', value: String(activeGoals.length), color: 'text-primary' },
+    { icon: Trophy, label: 'Concluídas', value: String(completedGoals.length), color: 'text-amber-600' },
+    { icon: Wallet, label: 'Total guardado', value: formatCentsToBRL(totalSavedCents), color: 'text-emerald-600' },
     {
       icon: Fire,
       label: 'Sequência',
       value: `${streakDays} ${streakDays === 1 ? 'dia' : 'dias'}`,
+      color: 'text-orange-500',
     },
   ]
 
   return (
     <AppShell>
-      <h1 className="text-headline-sm-mobile text-on-surface">Perfil</h1>
+      <h1 className="animate-fade-in-up text-headline-sm-mobile text-on-surface">Perfil</h1>
 
-      <div className="card-gradient-primary animate-fade-in-up mt-6 flex items-center gap-4 rounded-lg p-6 text-on-primary shadow-lg">
-        <EditableAvatar
-          name={profile?.name}
-          avatarUrl={profile?.avatar_url}
-          size="xl"
-          uploading={uploading}
-          onSelectFile={handleAvatarSelect}
-        />
-        <div className="min-w-0 flex-1">
+      <div
+        className="card-gradient-primary animate-scale-in mt-6 flex items-center gap-4 rounded-2xl p-6 text-on-primary shadow-xl"
+        style={{ animationDelay: '60ms' }}
+      >
+        <div className="relative z-10">
+          <EditableAvatar
+            name={profile?.name}
+            avatarUrl={profile?.avatar_url}
+            size="xl"
+            uploading={uploading}
+            onSelectFile={handleAvatarSelect}
+          />
+        </div>
+        <div className="relative z-10 min-w-0 flex-1">
           {editingName ? (
             <div className="flex items-center gap-1.5">
               <input
@@ -122,14 +130,14 @@ export function Profile() {
                   if (e.key === 'Enter') handleSaveName()
                   if (e.key === 'Escape') setEditingName(false)
                 }}
-                className="min-w-0 flex-1 rounded-md border border-white/30 bg-white/10 px-2 py-1 text-body-lg font-semibold text-on-primary placeholder:text-primary-fixed focus:border-white focus:outline-none"
+                className="min-w-0 flex-1 rounded-lg border border-white/30 bg-white/10 px-3 py-1.5 text-body-lg font-semibold text-on-primary placeholder:text-primary-fixed backdrop-blur-sm focus:border-white focus:outline-none"
               />
               <button
                 type="button"
                 onClick={handleSaveName}
                 disabled={savingName}
                 aria-label="Salvar nome"
-                className="shrink-0 rounded-full bg-white/15 p-1.5 disabled:opacity-60"
+                className="shrink-0 rounded-full bg-white/20 p-1.5 backdrop-blur-sm transition-all hover:bg-white/30 disabled:opacity-60"
               >
                 <Check size={16} weight="bold" />
               </button>
@@ -137,7 +145,7 @@ export function Profile() {
                 type="button"
                 onClick={() => setEditingName(false)}
                 aria-label="Cancelar"
-                className="shrink-0 rounded-full bg-white/15 p-1.5"
+                className="shrink-0 rounded-full bg-white/20 p-1.5 backdrop-blur-sm transition-all hover:bg-white/30"
               >
                 <X size={16} weight="bold" />
               </button>
@@ -171,10 +179,10 @@ export function Profile() {
         {stats.map((stat, index) => (
           <div
             key={stat.label}
-            style={{ animationDelay: `${index * 60}ms` }}
-            className="animate-fade-in-up card-elevated flex items-center gap-3 p-4"
+            style={{ animationDelay: `${100 + index * 70}ms` }}
+            className="animate-fade-in-up card-elevated card-elevated-hover flex items-center gap-3 rounded-2xl p-4"
           >
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-fixed text-on-primary-fixed-variant">
+            <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-fixed ${stat.color}`}>
               <stat.icon size={20} weight="fill" />
             </span>
             <div className="min-w-0">
@@ -188,30 +196,40 @@ export function Profile() {
       {achievements.length > 0 && (
         <Link
           to="/achievements"
-          className="animate-fade-in-up card-elevated card-elevated-hover mt-4 flex items-center justify-between p-4"
+          className="animate-fade-in-up card-elevated card-elevated-hover mt-4 flex items-center justify-between rounded-2xl p-4"
+          style={{ animationDelay: '380ms' }}
         >
-          <span className="flex items-center gap-2 text-body-md text-on-surface">
-            <Trophy size={18} weight="fill" className="text-primary" />
+          <span className="flex items-center gap-2.5 text-body-md text-on-surface">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-fixed">
+              <Sparkle size={16} weight="fill" className="text-primary" />
+            </span>
             {achievements.length} {achievements.length === 1 ? 'conquista' : 'conquistas'}{' '}
             desbloqueadas
           </span>
-          <span className="text-label-sm text-primary">Ver todas →</span>
+          <span className="text-label-sm font-semibold text-primary">Ver todas →</span>
         </Link>
       )}
 
       <section className="mt-8">
-        <h2 className="text-body-lg font-semibold text-on-surface">Metas que você compartilhou</h2>
+        <h2 className="animate-fade-in-up text-body-lg font-semibold text-on-surface">Metas que você compartilhou</h2>
+        {loading && (
+          <div className="mt-3 flex flex-col gap-3">
+            <Skeleton className="h-16 w-full" />
+            <Skeleton className="h-16 w-full" />
+          </div>
+        )}
         {!loading && sharedByMe.length === 0 && (
           <p className="mt-3 text-body-md text-on-surface-variant">
             Você ainda não compartilhou nenhuma meta.
           </p>
         )}
         <div className="mt-4 flex flex-col gap-3">
-          {sharedByMe.map(({ goal, members }) => (
+          {sharedByMe.map(({ goal, members }, i) => (
             <Link
               key={goal.id}
               to={`/goals/${goal.id}`}
-              className="card-elevated card-elevated-hover animate-fade-in-up block p-4"
+              style={{ animationDelay: `${i * 60}ms` }}
+              className="card-elevated card-elevated-hover animate-fade-in-up block rounded-2xl p-4"
             >
               <p className="text-body-md font-semibold text-on-surface">{goal.name}</p>
               <p className="mt-1 text-label-sm text-on-surface-variant">
@@ -223,20 +241,26 @@ export function Profile() {
       </section>
 
       <section className="mt-8">
-        <h2 className="text-body-lg font-semibold text-on-surface">
+        <h2 className="animate-fade-in-up text-body-lg font-semibold text-on-surface">
           Metas compartilhadas com você
         </h2>
+        {loading && (
+          <div className="mt-3 flex flex-col gap-3">
+            <Skeleton className="h-16 w-full" />
+          </div>
+        )}
         {!loading && sharedWithMe.length === 0 && (
           <p className="mt-3 text-body-md text-on-surface-variant">
             Ninguém compartilhou uma meta com você ainda.
           </p>
         )}
         <div className="mt-4 flex flex-col gap-3">
-          {sharedWithMe.map(({ goal, owner }) => (
+          {sharedWithMe.map(({ goal, owner }, i) => (
             <Link
               key={goal.id}
               to={`/goals/${goal.id}`}
-              className="card-elevated card-elevated-hover animate-fade-in-up block p-4"
+              style={{ animationDelay: `${i * 60}ms` }}
+              className="card-elevated card-elevated-hover animate-fade-in-up block rounded-2xl p-4"
             >
               <p className="text-body-md font-semibold text-on-surface">{goal.name}</p>
               <p className="mt-1 text-label-sm text-on-surface-variant">
@@ -247,11 +271,11 @@ export function Profile() {
         </div>
       </section>
 
-      <div className="mt-10">
+      <div className="animate-fade-in-up mt-10" style={{ animationDelay: '200ms' }}>
         <button
           type="button"
           onClick={handleSignOut}
-          className="flex w-full items-center justify-center gap-2 rounded-full border border-error px-4 py-3 text-label-md text-error transition-transform active:scale-95"
+          className="flex w-full items-center justify-center gap-2 rounded-full border-2 border-error/30 px-4 py-3 text-label-md font-semibold text-error transition-all hover:bg-error/5 active:scale-[0.98]"
         >
           <SignOut size={18} weight="bold" />
           Sair da conta

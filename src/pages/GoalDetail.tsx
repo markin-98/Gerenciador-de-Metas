@@ -17,6 +17,7 @@ import { ConfirmDialog } from '../components/ConfirmDialog'
 import { ShareLinkDialog } from '../components/ShareLinkDialog'
 import { Avatar } from '../components/Avatar'
 import { Confetti } from '../components/Confetti'
+import { Skeleton } from '../components/Skeleton'
 import { useRealtimeGoal } from '../hooks/useRealtimeGoal'
 import { useGoalInvite } from '../hooks/useGoalInvite'
 import { useGoalJoinRequests } from '../hooks/useGoalJoinRequests'
@@ -54,7 +55,29 @@ export function GoalDetail() {
   }, [goal?.status, goal?.name, showToast])
 
   if (!goal) {
-    return <AppShell><div /></AppShell>
+    return (
+      <AppShell>
+        <div className="flex flex-col gap-6">
+          <div className="card-elevated rounded-2xl p-6">
+            <div className="flex items-center gap-3">
+              <Skeleton className="h-7 w-7 rounded-lg" />
+              <Skeleton className="h-6 w-48" />
+            </div>
+            <Skeleton className="mt-4 h-4 w-32" />
+            <Skeleton className="mt-3 h-3 w-full rounded-full" />
+            <Skeleton className="mt-3 h-3 w-24" />
+          </div>
+          <div className="card-elevated rounded-2xl p-6">
+            <Skeleton className="h-5 w-36" />
+            <div className="mt-5 grid grid-cols-5 gap-3">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <Skeleton key={i} className="aspect-square rounded-full" />
+              ))}
+            </div>
+          </div>
+        </div>
+      </AppShell>
+    )
   }
 
   const { savedCents, remainingCents, percent } = calculateProgress(
@@ -142,12 +165,14 @@ export function GoalDetail() {
 
   return (
     <AppShell>
-      <div className="animate-fade-in-up card-elevated relative overflow-hidden p-6">
+      <div className="animate-fade-in-up card-elevated relative overflow-hidden rounded-2xl p-6">
         <Confetti fire={celebrate} />
 
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2.5">
-            <TypeIcon size={26} weight="duotone" className="shrink-0 text-primary" />
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary-fixed">
+              <TypeIcon size={18} weight="duotone" className="text-primary" />
+            </span>
             <h1 className="text-headline-sm-mobile text-on-surface">{goal.name}</h1>
           </div>
           <span
@@ -167,16 +192,16 @@ export function GoalDetail() {
             type="button"
             onClick={handleInvite}
             disabled={inviting}
-            className="inline-flex items-center gap-1.5 rounded-full border border-primary px-4 py-1.5 text-label-md text-primary transition-transform active:scale-95 disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary/50 px-4 py-2 text-label-md text-primary transition-all hover:bg-primary/5 active:scale-[0.97] disabled:opacity-60"
           >
             <UserPlus size={16} weight="bold" />
-            {inviting ? 'Gerando link…' : 'Convidar para esta meta'}
+            {inviting ? 'Gerando link…' : 'Convidar'}
           </button>
           <button
             type="button"
             onClick={() => setConfirmingDelete(true)}
             aria-label="Excluir meta"
-            className="inline-flex items-center justify-center rounded-full border border-error/40 p-2 text-error transition-transform active:scale-95"
+            className="inline-flex items-center justify-center rounded-full border border-error/30 p-2.5 text-error transition-all hover:bg-error/5 active:scale-[0.97]"
           >
             <TrashSimple size={16} weight="bold" />
           </button>
@@ -209,11 +234,13 @@ export function GoalDetail() {
 
       {isOwner && requests.length > 0 && (
         <div
-          style={{ animationDelay: '60ms' }}
-          className="animate-fade-in-up card-elevated mt-6 border border-primary/30 p-6"
+          style={{ animationDelay: '80ms' }}
+          className="animate-fade-in-up card-elevated mt-6 rounded-2xl border border-primary/20 p-6"
         >
           <div className="flex items-center gap-2">
-            <BellRinging size={18} weight="fill" className="text-primary" />
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-fixed">
+              <BellRinging size={16} weight="fill" className="text-primary" />
+            </span>
             <h2 className="text-body-lg font-semibold text-on-surface">
               {requests.length} {requests.length === 1 ? 'pedido pendente' : 'pedidos pendentes'}
             </h2>
@@ -234,7 +261,7 @@ export function GoalDetail() {
                   onClick={() => handleReject(request.id)}
                   disabled={resolvingId === request.id}
                   aria-label="Recusar"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-error/40 text-error transition-transform active:scale-95 disabled:opacity-60"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-error/30 text-error transition-all hover:bg-error/5 active:scale-95 disabled:opacity-60"
                 >
                   <X size={16} weight="bold" />
                 </button>
@@ -243,7 +270,7 @@ export function GoalDetail() {
                   onClick={() => handleApprove(request.id, request.profile?.name ?? 'Pessoa')}
                   disabled={resolvingId === request.id}
                   aria-label="Aprovar"
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-on-primary transition-transform active:scale-95 disabled:opacity-60"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-on-primary shadow-md shadow-primary/20 transition-all active:scale-95 disabled:opacity-60"
                 >
                   <Check size={16} weight="bold" />
                 </button>
@@ -254,12 +281,12 @@ export function GoalDetail() {
       )}
 
       <div
-        style={{ animationDelay: '80ms' }}
-        className="animate-fade-in-up card-elevated mt-6 p-6"
+        style={{ animationDelay: '100ms' }}
+        className="animate-fade-in-up card-elevated mt-6 rounded-2xl p-6"
       >
         <div className="flex items-center justify-between">
           <h2 className="text-body-lg font-semibold text-on-surface">Seus Depósitos</h2>
-          <span className="text-label-sm text-on-surface-variant">
+          <span className="rounded-full bg-primary-fixed px-3 py-1 text-label-sm font-semibold text-on-primary-fixed-variant">
             {deposits.filter((d) => d.status === 'completed').length}/{goal.deposits_count}
           </span>
         </div>
