@@ -47,8 +47,8 @@ export function DepositGrid({ deposits, onDepositClick }: DepositGridProps) {
               justCompleted.has(deposit.id) ? 'animate-pop' : ''
             } ${
               isCompleted
-                ? 'bg-primary text-on-primary shadow-inner ring-2 ring-primary ring-offset-2 ring-offset-surface-container-lowest'
-                : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'
+                ? 'bg-primary text-on-primary shadow-md shadow-primary/20 ring-2 ring-primary ring-offset-2 ring-offset-surface-container-lowest'
+                : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high hover:shadow-sm'
             }`}
           >
             {formatDepositLabel(deposit.amount_cents)}

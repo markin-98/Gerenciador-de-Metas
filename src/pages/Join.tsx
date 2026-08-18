@@ -89,8 +89,6 @@ export function Join() {
     join()
   }, [authLoading, session, token, user, navigate])
 
-  // Enquanto pendente, escuta em tempo real a aprovação do dono e redireciona
-  // assim que o pedido for aceito.
   useEffect(() => {
     if (status !== 'pending' || !user) return
 
@@ -121,17 +119,22 @@ export function Join() {
   }, [status, user, navigate])
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-surface px-6">
-      <div className="card-elevated w-full max-w-sm p-8 text-center">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface px-6">
+      <div className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
+
+      <div className="animate-scale-in card-elevated w-full max-w-sm rounded-2xl p-8 text-center">
         {status === 'loading' && (
-          <p className="text-body-md text-on-surface-variant">Entrando…</p>
+          <div className="flex flex-col items-center gap-4 py-4">
+            <div className="h-10 w-10 animate-spin rounded-full border-3 border-primary-fixed border-t-primary" />
+            <p className="text-body-md text-on-surface-variant">Entrando…</p>
+          </div>
         )}
         {status === 'pending' && (
           <>
-            <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-secondary-container text-on-secondary-container">
-              <HourglassMedium size={26} weight="fill" />
+            <span className="animate-pulse-soft mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-secondary-container text-on-secondary-container">
+              <HourglassMedium size={28} weight="fill" />
             </span>
-            <h1 className="mt-4 text-headline-sm-mobile text-on-surface">Pedido enviado!</h1>
+            <h1 className="mt-5 text-headline-sm-mobile text-on-surface">Pedido enviado!</h1>
             <p className="mt-2 text-body-md text-on-surface-variant">
               Aguardando o dono de "{goalName}" aprovar sua entrada. Essa tela atualiza sozinha
               assim que isso acontecer.
@@ -140,16 +143,20 @@ export function Join() {
         )}
         {status === 'rejected' && (
           <>
-            <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-error-container text-on-error-container">
-              <XCircle size={26} weight="fill" />
+            <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-error-container text-on-error-container">
+              <XCircle size={28} weight="fill" />
             </span>
-            <h1 className="mt-4 text-headline-sm-mobile text-on-surface">Pedido não aceito</h1>
+            <h1 className="mt-5 text-headline-sm-mobile text-on-surface">Pedido não aceito</h1>
             <p className="mt-2 text-body-md text-on-surface-variant">
               O dono de "{goalName}" não aprovou sua entrada dessa vez.
             </p>
           </>
         )}
-        {status === 'error' && <p className="text-body-md text-error">{error}</p>}
+        {status === 'error' && (
+          <div className="rounded-xl bg-error-container/50 px-4 py-3 text-body-md text-on-error-container">
+            {error}
+          </div>
+        )}
       </div>
     </div>
   )
