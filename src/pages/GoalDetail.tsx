@@ -9,6 +9,7 @@ import {
   Check,
   X,
   BellRinging,
+  WarningCircle,
 } from '@phosphor-icons/react'
 import { AppShell } from '../components/AppShell'
 import { DepositGrid } from '../components/DepositGrid'
@@ -32,7 +33,7 @@ export function GoalDetail() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { showToast } = useToast()
-  const { goal, deposits, markDeposit, unmarkDeposit, deleteGoal } = useRealtimeGoal(goalId)
+  const { goal, deposits, loading, markDeposit, unmarkDeposit, deleteGoal } = useRealtimeGoal(goalId)
   const { createInviteLink } = useGoalInvite(goalId, goal?.space_id)
   const isOwner = Boolean(user && goal && user.id === goal.created_by)
   const { requests, approve, reject } = useGoalJoinRequests(isOwner ? goalId : undefined)
@@ -54,7 +55,7 @@ export function GoalDetail() {
     previousStatus.current = goal?.status
   }, [goal?.status, goal?.name, showToast])
 
-  if (!goal) {
+  if (!goal && loading) {
     return (
       <AppShell>
         <div className="flex flex-col gap-6">
@@ -80,6 +81,31 @@ export function GoalDetail() {
     )
   }
 
+  if (!goal) {
+    return (
+      <AppShell>
+        <div className="animate-fade-in-up flex flex-col items-center gap-4 py-16 text-center">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-error-container text-on-error-container">
+            <WarningCircle size={28} weight="fill" />
+          </span>
+          <div>
+            <p className="text-body-lg font-semibold text-on-surface">Meta não encontrada</p>
+            <p className="mt-1 text-body-sm text-on-surface-variant">
+              Ela pode ter sido excluída ou você não tem mais acesso a ela.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="mt-2 rounded-full bg-primary px-6 py-2.5 text-label-lg font-semibold text-on-primary"
+          >
+            Voltar para o início
+          </button>
+        </div>
+      </AppShell>
+    )
+  }
+
   const { savedCents, remainingCents, percent } = calculateProgress(
     deposits,
     goal.total_amount_cents
@@ -92,6 +118,8 @@ export function GoalDetail() {
     if (deposit.status === 'pending') {
       const result = await markDeposit(deposit.id, user.id)
       if (!result.ok) showToast(result.message ?? 'Erro ao marcar depósito.', 'error')
+    } else if (deposit.completed_by !== user.id) {
+      showToast('Só quem marcou este depósito pode desmarcá-lo.', 'error')
     } else {
       setDepositToUnmark(deposit)
     }
@@ -313,6 +341,7 @@ export function GoalDetail() {
         title="Excluir esta meta?"
         description={`Isso vai apagar "${goal.name}" e todos os seus depósitos e conquistas relacionadas, para todo mundo que participa dela. Essa ação não pode ser desfeita.`}
         confirmLabel={deleting ? 'Excluindo…' : 'Excluir'}
+        confirmDisabled={deleting}
         onConfirm={handleDelete}
         onCancel={() => setConfirmingDelete(false)}
       />

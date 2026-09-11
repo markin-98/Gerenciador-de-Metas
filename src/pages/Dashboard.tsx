@@ -5,6 +5,7 @@ import { AppShell } from '../components/AppShell'
 import { GoalCard } from '../components/GoalCard'
 import { Logo } from '../components/Logo'
 import { Avatar } from '../components/Avatar'
+import { NotificationBell } from '../components/NotificationBell'
 import { AnimatedCentsValue } from '../components/AnimatedNumber'
 import { DashboardSkeleton } from '../components/Skeleton'
 import { useAuth } from '../contexts/AuthContext'
@@ -46,13 +47,16 @@ export function Dashboard() {
     <AppShell>
       <header className="animate-fade-in-up flex items-center justify-between gap-3">
         <Logo variant="full" size="lg" withBackground />
-        <Link
-          to="/profile"
-          aria-label="Meu perfil"
-          className="transition-transform active:scale-95"
-        >
-          <Avatar name={profile?.name} avatarUrl={profile?.avatar_url} size="md" />
-        </Link>
+        <div className="flex items-center gap-1">
+          <NotificationBell />
+          <Link
+            to="/profile"
+            aria-label="Meu perfil"
+            className="transition-transform active:scale-95"
+          >
+            <Avatar name={profile?.name} avatarUrl={profile?.avatar_url} size="md" />
+          </Link>
+        </div>
       </header>
 
       <div className="animate-fade-in-up mt-6" style={{ animationDelay: '60ms' }}>

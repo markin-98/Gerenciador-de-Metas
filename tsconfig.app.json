@@ -22,5 +22,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  // sw.ts roda no escopo WebWorker (lib "DOM" acima conflita com os tipos de
+  // ServiceWorkerGlobalScope); o vite-plugin-pwa bundla o service worker
+  // separadamente, então ele não precisa passar pelo tsc do app.
+  "exclude": ["src/sw.ts"]
 }

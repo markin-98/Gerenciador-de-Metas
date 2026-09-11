@@ -3,6 +3,7 @@ export type GoalStatus = 'active' | 'completed'
 export type DepositStatus = 'pending' | 'completed'
 export type SpaceRole = 'owner' | 'member'
 export type JoinRequestStatus = 'pending' | 'approved' | 'rejected'
+export type NotificationType = 'join_requested' | 'join_resolved' | 'deposit_marked' | 'goal_completed'
 
 export interface Profile {
   id: string
@@ -89,6 +90,28 @@ export interface Achievement {
   user_id: string
   earned_at: string
   goal?: Goal
+}
+
+export interface Notification {
+  id: string
+  user_id: string
+  type: NotificationType
+  title: string
+  body: string
+  goal_id: string | null
+  actor_id: string | null
+  read_at: string | null
+  created_at: string
+  actor?: Profile
+}
+
+export interface PushSubscriptionRow {
+  id: string
+  user_id: string
+  endpoint: string
+  p256dh: string
+  auth: string
+  created_at: string
 }
 
 // As tabelas abaixo são escritas como literais de tipo inline (no padrão gerado
@@ -338,6 +361,69 @@ export interface Database {
           space_id?: string
           user_id?: string
           earned_at?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          id: string
+          user_id: string
+          type: NotificationType
+          title: string
+          body: string
+          goal_id: string | null
+          actor_id: string | null
+          read_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          type: NotificationType
+          title: string
+          body: string
+          goal_id?: string | null
+          actor_id?: string | null
+          read_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          type?: NotificationType
+          title?: string
+          body?: string
+          goal_id?: string | null
+          actor_id?: string | null
+          read_at?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          id: string
+          user_id: string
+          endpoint: string
+          p256dh: string
+          auth: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          endpoint: string
+          p256dh: string
+          auth: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          endpoint?: string
+          p256dh?: string
+          auth?: string
+          created_at?: string
         }
         Relationships: []
       }

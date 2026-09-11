@@ -8,6 +8,13 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
+      injectManifest: {
+        // Mesmo escopo de cache do app shell que o generateSW já usava.
+        globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      },
       includeAssets: ['favicon.png', 'apple-touch-icon.png'],
       manifest: {
         name: 'Gerenciador de Metas',
@@ -28,12 +35,6 @@ export default defineConfig({
             purpose: 'maskable',
           },
         ],
-      },
-      workbox: {
-        // Só o "app shell" (JS/CSS/HTML/ícones) fica em cache. Chamadas à API
-        // do Supabase são para outro domínio e nunca passam pelo service
-        // worker — sempre direto na rede, dados nunca ficam desatualizados.
-        globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
       },
     }),
   ],

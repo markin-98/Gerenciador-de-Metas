@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-function toDateKey(iso: string) {
-  return iso.slice(0, 10)
+/** Chave de dia no fuso horário local (não UTC), pra bater com o "hoje" do usuário. */
+function toDateKey(date: Date) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
 }
 
 /** Calcula a sequência atual de dias seguidos com pelo menos um depósito marcado. */
@@ -36,17 +40,19 @@ export function useStreak(spaceId: string | undefined) {
       .limit(1000)
 
     const activeDays = new Set(
-      (deposits ?? []).filter((d) => d.completed_at).map((d) => toDateKey(d.completed_at as string))
+      (deposits ?? [])
+        .filter((d) => d.completed_at)
+        .map((d) => toDateKey(new Date(d.completed_at as string)))
     )
 
     let streak = 0
     const cursor = new Date()
-    const todayKey = toDateKey(cursor.toISOString())
+    const todayKey = toDateKey(cursor)
     if (!activeDays.has(todayKey)) {
       cursor.setDate(cursor.getDate() - 1)
     }
 
-    while (activeDays.has(toDateKey(cursor.toISOString()))) {
+    while (activeDays.has(toDateKey(cursor))) {
       streak += 1
       cursor.setDate(cursor.getDate() - 1)
     }

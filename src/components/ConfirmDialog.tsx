@@ -5,6 +5,7 @@ interface ConfirmDialogProps {
   title: string
   description: string
   confirmLabel?: string
+  confirmDisabled?: boolean
   onConfirm: () => void
   onCancel: () => void
 }
@@ -14,6 +15,7 @@ export function ConfirmDialog({
   title,
   description,
   confirmLabel = 'Confirmar',
+  confirmDisabled = false,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -46,7 +48,8 @@ export function ConfirmDialog({
           <button
             type="button"
             onClick={onConfirm}
-            className="rounded-full bg-error px-4 py-2.5 text-label-md font-medium text-on-error shadow-md shadow-error/20 transition-all hover:shadow-lg hover:shadow-error/30 active:scale-95"
+            disabled={confirmDisabled}
+            className="rounded-full bg-error px-4 py-2.5 text-label-md font-medium text-on-error shadow-md shadow-error/20 transition-all hover:shadow-lg hover:shadow-error/30 active:scale-95 disabled:pointer-events-none disabled:opacity-60"
           >
             {confirmLabel}
           </button>

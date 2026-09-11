@@ -7,6 +7,7 @@ import { Dashboard } from './pages/Dashboard'
 import { NewGoal } from './pages/NewGoal'
 import { GoalDetail } from './pages/GoalDetail'
 import { History } from './pages/History'
+import { Notifications } from './pages/Notifications'
 import { Achievements } from './pages/Achievements'
 import { Profile } from './pages/Profile'
 
@@ -53,6 +54,14 @@ function App() {
           element={
             <ProtectedRoute>
               <History />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <Notifications />
             </ProtectedRoute>
           }
         />

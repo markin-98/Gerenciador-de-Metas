@@ -11,6 +11,7 @@ import {
   CalendarBlank,
   SignOut,
   Sparkle,
+  BellRinging,
 } from '@phosphor-icons/react'
 import { AppShell } from '../components/AppShell'
 import { EditableAvatar } from '../components/EditableAvatar'
@@ -23,6 +24,7 @@ import { useStreak } from '../hooks/useStreak'
 import { useAchievements } from '../hooks/useAchievements'
 import { useSharedGoals } from '../hooks/useSharedGoals'
 import { useAvatarUpload } from '../hooks/useAvatarUpload'
+import { usePushSubscription } from '../hooks/usePushSubscription'
 import { useToast } from '../contexts/ToastContext'
 import { translateSupabaseError } from '../lib/errors'
 import { formatCentsToBRL } from '../lib/deposits'
@@ -39,6 +41,8 @@ export function Profile() {
   const { achievements } = useAchievements(spaceId)
   const { sharedByMe, sharedWithMe, loading } = useSharedGoals()
   const { uploadAvatar, uploading } = useAvatarUpload()
+  const { supported: pushSupported, subscribed: pushEnabled, enable: enablePush, disable: disablePush } =
+    usePushSubscription()
 
   const [editingName, setEditingName] = useState(false)
   const [nameDraft, setNameDraft] = useState('')
@@ -56,6 +60,19 @@ export function Profile() {
         year: 'numeric',
       })
     : null
+
+  async function handleTogglePush() {
+    try {
+      if (pushEnabled) {
+        await disablePush()
+      } else {
+        await enablePush()
+        showToast('Notificações push ativadas!', 'success')
+      }
+    } catch (err) {
+      showToast(translateSupabaseError(err), 'error')
+    }
+  }
 
   async function handleSignOut() {
     await signOut()
@@ -270,6 +287,35 @@ export function Profile() {
           ))}
         </div>
       </section>
+
+      {pushSupported && (
+        <div
+          className="animate-fade-in-up card-elevated mt-8 flex items-center justify-between gap-3 rounded-2xl p-4"
+          style={{ animationDelay: '160ms' }}
+        >
+          <span className="flex items-center gap-2.5 text-body-md text-on-surface">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-fixed text-primary">
+              <BellRinging size={18} weight="fill" />
+            </span>
+            Notificações push
+          </span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={pushEnabled}
+            onClick={handleTogglePush}
+            className={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${
+              pushEnabled ? 'bg-primary' : 'bg-outline-variant'
+            }`}
+          >
+            <span
+              className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow transition-transform ${
+                pushEnabled ? 'translate-x-5' : 'translate-x-0.5'
+              }`}
+            />
+          </button>
+        </div>
+      )}
 
       <div className="animate-fade-in-up mt-10" style={{ animationDelay: '200ms' }}>
         <button

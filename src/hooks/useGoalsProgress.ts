@@ -43,15 +43,22 @@ export function useGoalsProgress(goals: Goal[]) {
     reload()
   }, [reload])
 
+  const goalIdsKey = goals.map((g) => g.id).join(',')
+
   useEffect(() => {
+    if (!goalIdsKey) return
     const channel = supabase
-      .channel('deposits-progress')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'deposits' }, () => reload())
+      .channel(`deposits-progress:${goalIdsKey}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'deposits', filter: `goal_id=in.(${goalIdsKey})` },
+        () => reload()
+      )
       .subscribe()
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [reload])
+  }, [goalIdsKey, reload])
 
   return { progressByGoal, reload }
 }
